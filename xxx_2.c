@@ -53,14 +53,8 @@ static ssize_t x_store(struct class *class, const char *buf, size_t count) {
    return count;
 }
 
-/* <linux/device.h>
-#define CLASS_ATTR(_name, _mode, _show, _store) \
-struct class_attribute class_attr_##_name = __ATTR(_name, _mode, _show, _store) */
-CLASS_ATTR(xxx_2, (S_IWUSR | S_IRUGO), &x_show, &x_store); ////
-//CLASS_ATTR(xxx_2, (S_IROTH | S_IWOTH), &x_show, &x_store);
-//CLASS_ATTR(xxx_2, 0666, &x_show, &x_store);
-//CLASS_ATTR(xxx, S_IWUSR, &x_show, &x_store);
-//CLASS_ATTR(xxx_2, (S_IWUGO | S_IRUGO), &x_show, &x_store);
+
+CLASS_ATTR(xxx_2, (S_IWUSR | S_IRUGO), &x_show, &x_store); 
 
 
 static struct class *x_class;
