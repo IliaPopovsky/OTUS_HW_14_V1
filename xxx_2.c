@@ -75,6 +75,7 @@ void x_cleanup(void) {
 extern void class_remove_file(struct class *class, const struct class_attribute *attr); */
    class_remove_file(x_class, &class_attr_xxx_2);
    class_destroy(x_class);
+   printk("'xxx_2' module unloaded\n");
    return;
 }
 

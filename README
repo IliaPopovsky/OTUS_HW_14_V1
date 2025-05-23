@@ -1,0 +1,123 @@
+Далее приведены команды терминала для сборки модуля (make), загрузки модуля (insmod), для проверки наличия нашего модуля в списке всех загруженных модулей ядра (lsmod), проверки наличия и прав доступа файла-интерфейса модуля в /sys и файлов модуля в /sys (ls), проверки дерева каталогов класса модуля (tree), проверки записей в системный журнал связанных с нашим модулем (dmesg), чтения из файла-интерфейса модуля (cat), записи в файл-интерфейс модуля (echo), переключения на пользователя root в Linux, для возможности записи в файл-интерфейс модуля, т.к. права доступа в файле-интерфейсе модуля -rw-r--r-- (sudo su), выгрузки нашего модуля (rmmod).
+
+
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ make
+make -C /lib/modules/5.15.0-107-generic/build M=/home/ilia/OTUS_HW_14_V1 modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.0-107-generic»
+warning: the compiler differs from the one used to build the kernel
+  The kernel was built by: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+  You are using:           gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+  CC [M]  /home/ilia/OTUS_HW_14_V1/xxx_2.o
+  MODPOST /home/ilia/OTUS_HW_14_V1/Module.symvers
+  CC [M]  /home/ilia/OTUS_HW_14_V1/xxx_2.mod.o
+  LD [M]  /home/ilia/OTUS_HW_14_V1/xxx_2.ko
+  BTF [M] /home/ilia/OTUS_HW_14_V1/xxx_2.ko
+Skipping BTF generation for /home/ilia/OTUS_HW_14_V1/xxx_2.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.0-107-generic»
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ sudo insmod xxx_2.ko
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ lsmod | head -n2
+Module                  Size  Used by
+xxx_2                  16384  0
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ ls -lR /sys/class/x-class
+/sys/class/x-class:
+итого 0
+-rw-r--r-- 1 root root 4096 мая 23 19:11 xxx_2
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ tree /sys/class/x-class
+/sys/class/x-class
+└── xxx_2
+
+0 directories, 1 file
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ ls -l /sys/module/xxx_2/
+итого 0
+-r--r--r-- 1 root root 4096 мая 23 19:11 coresize
+drwxr-xr-x 2 root root    0 мая 23 19:11 holders
+-r--r--r-- 1 root root 4096 мая 23 19:14 initsize
+-r--r--r-- 1 root root 4096 мая 23 19:14 initstate
+drwxr-xr-x 2 root root    0 мая 23 19:14 notes
+-r--r--r-- 1 root root 4096 мая 23 19:11 refcnt
+drwxr-xr-x 2 root root    0 мая 23 19:14 sections
+-r--r--r-- 1 root root 4096 мая 23 19:14 srcversion
+-r--r--r-- 1 root root 4096 мая 23 19:14 taint
+--w------- 1 root root 4096 мая 23 19:11 uevent
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ dmesg | tail -n18 | grep -v ^audit
+[22422.234769] audit: type=1107 audit(1748014325.642:237): pid=1104 uid=103 auid=4294967295 ses=4294967295 subj=unconfined msg='apparmor="DENIED" operation="dbus_method_call"  bus="system" path="/org/freedesktop/hostname1" interface="org.freedesktop.DBus.Properties" member="GetAll" mask="send" name=":1.140" pid=8632 label="snap.firefox.firefox" peer_pid=11857 peer_label="unconfined"
+                exe="/usr/bin/dbus-daemon" sauid=103 hostname=? addr=? terminal=?'
+[22750.947381] audit: type=1107 audit(1748014654.355:238): pid=1104 uid=103 auid=4294967295 ses=4294967295 subj=unconfined msg='apparmor="DENIED" operation="dbus_method_call"  bus="system" path="/org/freedesktop/hostname1" interface="org.freedesktop.DBus.Properties" member="GetAll" mask="send" name=":1.146" pid=8632 label="snap.firefox.firefox" peer_pid=12318 peer_label="unconfined"
+                exe="/usr/bin/dbus-daemon" sauid=103 hostname=? addr=? terminal=?'
+[24222.288824] 'xxx_2' module initialized
+[24248.496756] read 19
+[24250.238499] read 19
+[24250.238745] read 19
+[24250.312627] read 19
+[24250.314574] read 19
+[24250.339736] read 19
+[24772.360741] 'xxx_2' module initialized
+[24809.554263] read 19
+[24810.687943] read 19
+[24810.688199] read 19
+[24810.766599] read 19
+[24810.771826] read 19
+[24810.794229] read 19
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ dmesg | tail -n18 | grep -v ^audit
+[22422.234769] audit: type=1107 audit(1748014325.642:237): pid=1104 uid=103 auid=4294967295 ses=4294967295 subj=unconfined msg='apparmor="DENIED" operation="dbus_method_call"  bus="system" path="/org/freedesktop/hostname1" interface="org.freedesktop.DBus.Properties" member="GetAll" mask="send" name=":1.140" pid=8632 label="snap.firefox.firefox" peer_pid=11857 peer_label="unconfined"
+                exe="/usr/bin/dbus-daemon" sauid=103 hostname=? addr=? terminal=?'
+[22750.947381] audit: type=1107 audit(1748014654.355:238): pid=1104 uid=103 auid=4294967295 ses=4294967295 subj=unconfined msg='apparmor="DENIED" operation="dbus_method_call"  bus="system" path="/org/freedesktop/hostname1" interface="org.freedesktop.DBus.Properties" member="GetAll" mask="send" name=":1.146" pid=8632 label="snap.firefox.firefox" peer_pid=12318 peer_label="unconfined"
+                exe="/usr/bin/dbus-daemon" sauid=103 hostname=? addr=? terminal=?'
+[24222.288824] 'xxx_2' module initialized
+[24248.496756] read 19
+[24250.238499] read 19
+[24250.238745] read 19
+[24250.312627] read 19
+[24250.314574] read 19
+[24250.339736] read 19
+[24772.360741] 'xxx_2' module initialized
+[24809.554263] read 19
+[24810.687943] read 19
+[24810.688199] read 19
+[24810.766599] read 19
+[24810.771826] read 19
+[24810.794229] read 19
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ cat /sys/class/x-class/xxx_2
+Hello from module!
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ dmesg | tail -n15 | grep -v ^audit
+[24222.288824] 'xxx_2' module initialized
+[24248.496756] read 19
+[24250.238499] read 19
+[24250.238745] read 19
+[24250.312627] read 19
+[24250.314574] read 19
+[24250.339736] read 19
+[24772.360741] 'xxx_2' module initialized
+[24809.554263] read 19
+[24810.687943] read 19
+[24810.688199] read 19
+[24810.766599] read 19
+[24810.771826] read 19
+[24810.794229] read 19
+[25239.406067] read 19
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ echo This new message for module > /sys/class/x-class/xxx_2
+bash: /sys/class/x-class/xxx_2: Отказано в доступе
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ sudo echo This new message for module > /sys/class/x-class/xxx_2
+bash: /sys/class/x-class/xxx_2: Отказано в доступе
+ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ sudo su
+[sudo] пароль для ilia: 
+root@ilia-VirtualBox:/home/ilia/OTUS_HW_14_V1# echo This new message for module > /sys/class/x-class/xxx_2
+root@ilia-VirtualBox:/home/ilia/OTUS_HW_14_V1# cat /sys/class/x-class/xxx_2
+This new message for module
+root@ilia-VirtualBox:/home/ilia/OTUS_HW_14_V1# dmesg | tail -n15 | grep -v ^audit
+[24810.771826] read 19
+[24810.794229] read 19
+[25239.406067] read 19
+[25382.111960] read 19
+[25392.806812] read 19
+[25392.807772] read 19
+[25464.915909] write 28
+[25464.916583] read 28
+[25475.623090] read 28
+[25475.624089] read 28
+[25475.703515] read 28
+[25475.706147] read 28
+[25475.723497] read 28
+[25483.604086] hrtimer: interrupt took 14283005 ns
+[25509.061873] read 28
+root@ilia-VirtualBox:/home/ilia/OTUS_HW_14_V1# sudo rmmod xxx_2
