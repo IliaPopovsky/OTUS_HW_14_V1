@@ -1,5 +1,7 @@
 Далее приведены команды терминала для сборки модуля (make), загрузки модуля (insmod), для проверки наличия нашего модуля в списке всех загруженных модулей ядра (lsmod), проверки наличия и прав доступа файла-интерфейса модуля в /sys и файлов модуля в /sys (ls), проверки дерева каталогов класса модуля (tree), проверки записей в системный журнал связанных с нашим модулем (dmesg), чтения из файла-интерфейса модуля (cat), записи в файл-интерфейс модуля (echo), переключения на пользователя root в Linux, для возможности записи в файл-интерфейс модуля, т.к. права доступа в файле-интерфейсе модуля -rw-r--r-- (sudo su), выгрузки нашего модуля (rmmod).
 
+Below are shown the terminal commands for building the module (make), loading the module (insmod), checking our module in the list of all loaded kernel modules (lsmod), checking the international and right access of the module interface file in /sys and the module files in /sys (ls), checking the directories of the module class tree (tree), checking the entries in the system log with our modules (dmesg), reading from the file interface module (cat), including in the file interface module (echo), switching to the root user in Linux, to be able to write to the file interface of the module, since the access rights in the module interface file are -rw-r--r-- (sudo su), unloading our module (rmmod).
+
 
 ilia@ilia-VirtualBox:~/OTUS_HW_14_V1$ make
 make -C /lib/modules/5.15.0-107-generic/build M=/home/ilia/OTUS_HW_14_V1 modules
